@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MP3 Metadata Viewer</title>
+</head>
+<body>
+  <h1>Upload an MP3 File to View Metadata</h1>
+  <input type="file" id="fileInput" />
+  <pre id="metadata"></pre>
+
+  <script src="https://cdn.jsdelivr.net/npm/id3js@2.0.0/dist/id3.min.js"></script>
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const metadataDisplay = document.getElementById('metadata');
+
+    fileInput.addEventListener('change', function(event) {
+      const file = fileInput.files[0];
+      if (file && file.type === 'audio/mp3') {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const arrayBuffer = e.target.result;
+
+          // Load ID3 tags from the MP3 file
+          ID3.loadTags(file.name, function() {
+            const tags = ID3.getAllTags(file.name);
+            metadataDisplay.textContent = JSON.stringify(tags, null, 2);
+          }, { data: arrayBuffer });
+        };
+        reader.readAsArrayBuffer(file);
+      } else {
+        metadataDisplay.textContent = 'Please upload a valid MP3 file.';
+      }
+    });
+  </script>
+</body>
+</html>
