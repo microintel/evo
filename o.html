@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>OTP Notification</title>
+</head>
+<body>
+  <h2>Click to Get Your OTP</h2>
+  <button onclick="showOTP()">Send OTP Notification</button>
+
+  <script>
+    function showOTP() {
+      const otp = '654321'; // You can randomize this
+      if (Notification.permission === 'granted') {
+        new Notification('OTP Verification', {
+          body: `Your OTP is ${otp}`,
+          icon: 'https://cdn-icons-png.flaticon.com/512/561/561127.png' // Optional icon
+        });
+      } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission().then(permission => {
+          if (permission === 'granted') {
+            new Notification('OTP Verification', {
+              body: `Your OTP is ${otp}`,
+              icon: 'https://cdn-icons-png.flaticon.com/512/561/561127.png'
+            });
+          } else {
+            alert('Notification permission denied');
+          }
+        });
+      } else {
+        alert('Notification permission denied');
+      }
+    }
+  </script>
+</body>
+</html>
